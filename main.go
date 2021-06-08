@@ -50,7 +50,7 @@ type ProjectProcess struct {
 
 func main() {
 	// Set random seed
-	rand.Seed(3)
+	rand.Seed(33)
 
 	// Initialize project components
 	cashProcess := CashProcess{
@@ -180,7 +180,7 @@ func (pp *ProjectProcess) Lsm() float64 {
 		nextVal := mat.NewVecDense(pp.Runs, nil)
 
 		// Discount next period's value to serve as the dependent variable of the regression
-		nextVal.ScaleVec(cashDiscRate*investDiscRate, valueArray.ColView(period+1))
+		nextVal.ScaleVec(investDiscRate, valueArray.ColView(period+1))
 
 		// Initialize basis matrix for regression
 		basisMatrix := mat.NewDense(pp.Runs, 9, nil)
