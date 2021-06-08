@@ -242,4 +242,3 @@ func basis(x, y float64) []float64 {
 // local function aliases
 var exp = math.Exp
 var sqrt = math.Sqrt
-var stdNorm = rand.NormFloat64
