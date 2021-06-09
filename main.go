@@ -50,7 +50,7 @@ type ProjectProcess struct {
 
 func main() {
 	// Set random seed
-	rand.Seed(33)
+	rand.Seed(355)
 
 	// Initialize project components
 	cashProcess := CashProcess{
