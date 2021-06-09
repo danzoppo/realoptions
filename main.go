@@ -220,7 +220,7 @@ func (pp *ProjectProcess) Lsm() float64 {
 	mat.Col(initialValue, 0, valueArray)
 
 	// Discount one last time to initial period
-	floats.ScaleTo(initialValue, cashDiscRate*investDiscRate, initialValue)
+	floats.ScaleTo(initialValue, investDiscRate, initialValue)
 
 	// Average discounted initial period across all runs
 	retVal := stat.Mean(initialValue, nil)
