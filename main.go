@@ -207,9 +207,8 @@ func (pp *ProjectProcess) Lsm() float64 {
 				if investVal > 0 {
 					valueArray.Set(run, period, nextVal.AtVec(run)-pp.Investment*pp.TimeStep)
 				}
-			}
-			// Post investment sales cash flow
-			if costMatrix.At(run, period) == 0 {
+			} else {
+				// Post investment sales cash flow
 				valueArray.Set(run, period, cashMatrix.At(run, period)*pp.TimeStep+
 					cashDiscRate*valueArray.At(run, period+1))
 			}
