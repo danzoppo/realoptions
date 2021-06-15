@@ -180,7 +180,7 @@ func (pp *ProjectProcess) Lsm() float64 {
 		nextVal.ScaleVec(investDiscRate, valueArray.ColView(period+1))
 
 		// Initialize basis matrix for regression
-		basisMatrix := mat.NewDense(pp.Runs, 9, nil)
+		basisMatrix := mat.NewDense(pp.Runs, pp.PolynomialOrder, nil)
 
 		// Set basis matrix rows for the regression
 		for run := 0; run < pp.Runs; run++ {
@@ -188,7 +188,7 @@ func (pp *ProjectProcess) Lsm() float64 {
 		}
 
 		// Solve for regression coefficients
-		coefficients := mat.NewVecDense(9, nil)
+		coefficients := mat.NewVecDense(pp.PolynomialOrder, nil)
 		coefficients.SolveVec(basisMatrix, nextVal)
 
 		// Estimate continuation value of investment
