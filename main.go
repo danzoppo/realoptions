@@ -164,9 +164,6 @@ func (pp *ProjectProcess) Lsm() float64 {
 			valueArray.Set(run, lastPeriod, termVal)
 		}
 
-		// if costMatrix.At(run, lastPeriod) != 0 {
-		// 	fmt.Println(valueArray.At(run, lastPeriod))
-		// }
 	}
 
 	// Discount rates depending on the phase of the project
