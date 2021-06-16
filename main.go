@@ -31,10 +31,10 @@ type CostProcess struct {
 
 // Simulation holds the assumptions for the Monte Carlo simulation.
 type Simulation struct {
-	TimeStep        float64
-	PatentLength    int
-	Runs            int
-	PolynomialOrder int
+	TimeStep     float64
+	PatentLength int
+	Runs         int
+	Basis        func(x, y float64) []float64
 }
 
 // ProjectProcess contains the correlated structures of the cost
@@ -67,10 +67,10 @@ func main() {
 		FailureProb:       0.06931,
 	}
 	sim := Simulation{
-		TimeStep:        0.25,
-		PatentLength:    20,
-		Runs:            200_000,
-		PolynomialOrder: 9,
+		TimeStep:     0.25,
+		PatentLength: 20,
+		Runs:         200_000,
+		Basis:        basis,
 	}
 
 	project := ProjectProcess{
@@ -170,6 +170,9 @@ func (pp *ProjectProcess) Lsm() float64 {
 	cashDiscRate := exp(-1 * pp.RiskFreeRate * pp.TimeStep)
 	investDiscRate := exp(-1 * (pp.RiskFreeRate + pp.FailureProb) * pp.TimeStep)
 
+	// Determine size of Basis matrix for value function approximation
+	numBasisCols := len(pp.Basis(0, 0))
+
 	// Value iteration
 	for period := lastPeriod - 1; period >= 0; period-- {
 
@@ -180,15 +183,15 @@ func (pp *ProjectProcess) Lsm() float64 {
 		nextVal.ScaleVec(investDiscRate, valueArray.ColView(period+1))
 
 		// Initialize basis matrix for regression
-		basisMatrix := mat.NewDense(pp.Runs, pp.PolynomialOrder, nil)
+		basisMatrix := mat.NewDense(pp.Runs, numBasisCols, nil)
 
 		// Set basis matrix rows for the regression
 		for run := 0; run < pp.Runs; run++ {
-			basisMatrix.SetRow(run, basis(costMatrix.At(run, period), cashMatrix.At(run, period)))
+			basisMatrix.SetRow(run, pp.Basis(costMatrix.At(run, period), cashMatrix.At(run, period)))
 		}
 
 		// Solve for regression coefficients
-		coefficients := mat.NewVecDense(pp.PolynomialOrder, nil)
+		coefficients := mat.NewVecDense(numBasisCols, nil)
 		coefficients.SolveVec(basisMatrix, nextVal)
 
 		// Estimate continuation value of investment
