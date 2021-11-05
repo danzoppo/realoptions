@@ -7,6 +7,8 @@ the reference below. The algorithm uses a variant of the Least Squares Monte Car
 from Longstaff & Schwartz (2001). LSM is a parametric value function approximation approach that estimates
 the value function of the dynamic program using Ordinary Least Squares.
 
+See the file main.go
+
 For a more extensive blog post discussing the R&D model see <a href="https://freeholdfinance.com/2021/04/01/valuing-rd-and-patents-with-real-options-analysis/">here</a>.
 
 ## References
